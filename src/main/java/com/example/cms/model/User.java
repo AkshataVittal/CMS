@@ -42,6 +42,9 @@ public class User {
 	
 	private boolean deleted;
 	
+	@OneToMany(mappedBy = "user")
+	private List<Blog> blogList;
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -97,6 +100,16 @@ public class User {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+
+	public List<Blog> getBlogList() {
+		return blogList;
+	}
+
+	public void setBlogList(List<Blog> blogList) {
+		this.blogList = blogList;
+	}
+	
+	
 
 
 }

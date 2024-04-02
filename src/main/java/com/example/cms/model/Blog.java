@@ -1,21 +1,35 @@
 package com.example.cms.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(name ="blog",
 uniqueConstraints=
 @UniqueConstraint(columnNames={"tittle"}))
+@Getter
+@Setter
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Blog {
 	
 	@Id
@@ -25,47 +39,20 @@ public class Blog {
 	private String[] topics;
 	private String about;
 	
-	@ManyToMany()
-	private List<User> userList;
+	@CreatedDate
+	private LocalDateTime createdAt;
+	@LastModifiedDate
+	private LocalDateTime modifiedAt;
+	@ManyToOne
+	private User user;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "blog")
+	private List<BlogPost> posts;
+	
+	@OneToOne
+	private ContributionPanel panel;
 
-	public int getBlogId() {
-		return blogId;
-	}
 
-	public void setBlogId(int blogId) {
-		this.blogId = blogId;
-	}
-
-	public String getTittle() {
-		return tittle;
-	}
-
-	public void setTittle(String tittle) {
-		this.tittle = tittle;
-	}
-
-	public String[] getTopics() {
-		return topics;
-	}
-
-	public void setTopics(String[] topics) {
-		this.topics = topics;
-	}
-
-	public String getAbout() {
-		return about;
-	}
-
-	public void setAbout(String about) {
-		this.about = about;
-	}
-
-	public List<User> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
-	}
 
 }
